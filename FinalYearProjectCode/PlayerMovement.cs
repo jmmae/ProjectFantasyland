@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     // public CharacterController controller;
 
     public float speed = 10f;
+    public float jumpSpeed = 5f;
 
     private Rigidbody2D rigidBody;
 
@@ -23,7 +24,9 @@ public class PlayerMovement : MonoBehaviour
         // controller.Move(movement * speed * Time.deltaTime);
 
         Vector2 movement = new Vector2(xAxis * speed, rigidBody.velocity.y);
-
         rigidBody.velocity = movement;
+
+        if(Input.GetKey(KeyCode.Space))
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpSpeed);
     }
 }
