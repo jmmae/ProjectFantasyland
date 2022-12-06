@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour {
 
@@ -16,31 +17,45 @@ public class PlayerMovement : MonoBehaviour {
     public TextMeshProUGUI livesOutput;
 
     private Rigidbody rigidBody;
-    private BoxCollider boxCollider;
+    private CapsuleCollider capsuleCollider;
     private SpriteRenderer spriteRenderer;
     
     [SerializeField] private LayerMask floorLayer;
 
     private GameObject cameraMovement;
     private GameObject playerSpawn;
+    private Animator animator;
+    private bool grounded;
+
+    public static bool gameOver;
+    public GameObject gameOverScreen;
 
     private void Start() {
         rigidBody = GetComponent<Rigidbody>();
-        boxCollider = GetComponent<BoxCollider>();
-        spriteRenderer = GetComponent<SpriteRenderer>(); 
+        capsuleCollider = GetComponent<CapsuleCollider>();
         cameraMovement = GameObject.Find("Main Camera");
         playerSpawn = GameObject.Find("PlayerSpawn");
+        animator = GetComponent<Animator>();
 
         rigidBody.transform.position = playerSpawn.transform.position; // Sets the player location to player spawn
+        gameOver = false;
+
+        coinCounter = 0; //Reset the Coin Counter
+        livesCounter = 3; //Reset the Lives Counter
     }
 
     // Update is called once per frame
     void Update() { 
         coinOutput.text = "Coins: " + coinCounter; // Renders current coins
         livesOutput.text = "Lives: " + livesCounter; // Renders current lives
+
+        if (gameOver) {
+            gameOverScreen.SetActive(true); //Display Game Over Screen
+        }
     }
     
     void FixedUpdate() {
+        grounded = isOnTheGround();
         xAxis = Input.GetAxis("Horizontal");
 
         // Setting up player movememnt so it can be manipulated
@@ -48,31 +63,49 @@ public class PlayerMovement : MonoBehaviour {
         rigidBody.velocity = movement;
 
         // Allows player to jump:
-        if(isOnTheGround() && Input.GetKey(KeyCode.Space))
+        if (grounded && Input.GetKey(KeyCode.Space))
             rigidBody.velocity = new Vector3(rigidBody.velocity.x, jumpSpeed);
 
-        spriteRenderer.flipX = (xAxis < -0f); // Allows player to change direction in appearance
+        // Allows player to change direction in appearance
+        if (xAxis < 0f) {
+            animator.SetBool("isWalking", grounded);
+            transform.rotation = Quaternion.AngleAxis(-90, Vector3.up);
+        } else if (xAxis > 0f) {
+            animator.SetBool("isWalking", grounded);
+            transform.rotation = Quaternion.AngleAxis(90, Vector3.up);
+        } else
+            animator.SetBool("isWalking", false);
 
         cameraMovement.transform.position = new Vector3(rigidBody.position.x, rigidBody.position.y, cameraMovement.transform.position.z) + new Vector3(0, 20, 0); //Camera follows player
         
         Physics.gravity = new Vector3(0, -100F, 0); // Overrides gravity of player
+
+        if (numOfLives() <= 0) {
+            rigidBody.velocity = Vector3.zero; //Stop player from moving
+            gameOver = true; 
+        }
     }
 
     // Checks if the player is on the ground using Raycast
     private bool isOnTheGround() {
         RaycastHit raycastHit;
-        bool Raycast = Physics.BoxCast(boxCollider.bounds.center + new Vector3(0,3,0), boxCollider.bounds.size, Vector3.down, out raycastHit, transform.rotation, 2f, floorLayer);
+        bool Raycast = Physics.Raycast(capsuleCollider.bounds.center, Vector3.down, out raycastHit, 5f, floorLayer);
         return Raycast;
+
     }
 
     // Decreases lives counter
     public static void decrementLives() {
-        // if(livesCounter > 0f) 
         livesCounter--; 
-        //     rigidBody.transform.position = playerSpawn.transform.position; 
-        // else if(livesCounter <= 0f) 
-        //     print("no more lives :(");
-        //     rigidBody.transform.position = playerSpawn.transform.position;
+    }
+
+    public static int numOfLives() {
+        return livesCounter; 
+    }
+
+    //Replay Current Level
+    public void Replay() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single); 
     }
 
 }
