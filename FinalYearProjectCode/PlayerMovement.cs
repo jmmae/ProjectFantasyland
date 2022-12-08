@@ -41,13 +41,13 @@ public class PlayerMovement : MonoBehaviour {
         gameOver = false;
 
         coinCounter = 0; //Reset the Coin Counter
-        livesCounter = 3; //Reset the Lives Counter
+        livesCounter = 3; //Resets the Lives Counter
     }
 
     // Update is called once per frame
     void Update() { 
-        coinOutput.text = "Coins: " + coinCounter; // Renders current coins
-        livesOutput.text = "Lives: " + livesCounter; // Renders current lives
+        coinOutput.text = coinCounter + ""; // Renders current coins
+        livesOutput.text = livesCounter + ""; // Renders current lives
 
         if (gameOver) {
             gameOverScreen.SetActive(true); //Display Game Over Screen
@@ -91,7 +91,6 @@ public class PlayerMovement : MonoBehaviour {
         RaycastHit raycastHit;
         bool Raycast = Physics.Raycast(capsuleCollider.bounds.center, Vector3.down, out raycastHit, 5f, floorLayer);
         return Raycast;
-
     }
 
     // Decreases lives counter
@@ -106,6 +105,11 @@ public class PlayerMovement : MonoBehaviour {
     //Replay Current Level
     public void Replay() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single); 
+    }
+
+    public void exitGame() {
+        Application.Quit();
+        print("Exited Game");
     }
 
 }
