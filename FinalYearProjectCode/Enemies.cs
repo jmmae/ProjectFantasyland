@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemies : MonoBehaviour {
     
     public int direction = 1;
+    public int health = 100; //Enemy Health stat
     public float distance = 5;
     public float speed = 5f;
     public float debounce = 2f; //Number in seconds for hit debounce (prevents instant death)
@@ -19,7 +20,7 @@ public class Enemies : MonoBehaviour {
     void FixedUpdate() {
         debounceTimer -= Time.deltaTime;
 
-        transform.Translate(Vector2.right * Time.deltaTime * speed * direction); //Move the enemy to the right
+        transform.Translate(Vector3.right * Time.deltaTime * speed * direction); //Move the enemy to the right
         if (transform.position.x > startingPos + distance || transform.position.x < startingPos) 
             direction *= -1; //Change direction of sprite
     }
@@ -29,6 +30,13 @@ public class Enemies : MonoBehaviour {
         if (collide.transform.tag == "Player" && debounceTimer <= 0) {
             debounceTimer = debounce;
             PlayerMovement.decrementLives(); // Decreases lives by 1 when hit
+        }
+    }
+
+    public void TakeDamage(int Damage) {
+        health -= Damage;
+        if (health <= 0) {
+            Destroy(gameObject);
         }
     }
 }
