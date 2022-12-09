@@ -98,6 +98,10 @@ public class PlayerMovement : MonoBehaviour {
         livesCounter--; 
     }
 
+    public static void increaseLives() {
+        livesCounter++;
+    }
+
     public static int numOfLives() {
         return livesCounter; 
     }
