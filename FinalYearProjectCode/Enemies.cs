@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemies : MonoBehaviour {
     
     public int direction = 1;
-    public int health = 100; //Enemy Health stat
+    public int health = 3; //Enemy Health stat
     public float distance = 5;
     public float speed = 5f;
     public float debounce = 2f; //Number in seconds for hit debounce (prevents instant death)
