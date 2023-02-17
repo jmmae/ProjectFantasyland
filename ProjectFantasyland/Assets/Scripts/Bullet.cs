@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour {
     public float speed = 20f;
 
     // The damage the bullet will deal
-    public int damage = 10;
+    public int damage = 1;
 
     public int direction = 1;
 
@@ -30,7 +30,13 @@ public class Bullet : MonoBehaviour {
         if (collide.tag == "Enemy") {
             collide.GetComponent<Enemies>().TakeDamage(damage);
             // Destroy the bullet
-             Destroy(gameObject);
+            Destroy(gameObject);
+        }
+
+        if (collide.tag == "Enemy2") {
+            collide.GetComponent<Enemies2>().TakeDamage(damage);
+            // Destroy the bullet
+            Destroy(gameObject);
         }
     }
 }

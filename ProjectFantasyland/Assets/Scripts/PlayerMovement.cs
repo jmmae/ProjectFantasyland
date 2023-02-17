@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour {
     
     [SerializeField] private LayerMask floorLayer;
 
-    private GameObject cameraMovement;
+    //private GameObject cameraMovement;
     private GameObject playerSpawn;
     private GameObject projectileSpawner;
     private Animator animator;
@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour {
     private void Start() {
         rigidBody = GetComponent<Rigidbody>();
         capsuleCollider = GetComponent<CapsuleCollider>();
-        cameraMovement = GameObject.Find("Main Camera");
+        //cameraMovement = GameObject.Find("Main Camera");
         playerSpawn = GameObject.Find("PlayerSpawn");
         animator = GetComponent<Animator>();
         projectileSpawner = GameObject.Find("ProjectileSpawner");
@@ -103,7 +103,7 @@ public class PlayerMovement : MonoBehaviour {
         } else
             animator.SetBool("isWalking", false);
 
-        cameraMovement.transform.position = new Vector3(rigidBody.position.x, rigidBody.position.y, cameraMovement.transform.position.z) + new Vector3(0, 20, 0); //Camera follows player
+        //cameraMovement.transform.position = new Vector3(rigidBody.position.x, rigidBody.position.y, cameraMovement.transform.position.z) + new Vector3(0, 20, 0); //Camera follows player
         
         Physics.gravity = new Vector3(0, -100F, 0); // Overrides gravity of player
 

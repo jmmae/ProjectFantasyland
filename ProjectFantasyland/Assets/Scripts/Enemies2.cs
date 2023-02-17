@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemies : MonoBehaviour {
+public class Enemies2 : MonoBehaviour {
     
     public int direction = 1;
     public int health = 3; //Enemy Health stat
@@ -13,15 +13,15 @@ public class Enemies : MonoBehaviour {
     private float startingPos;
 
     void Start() {
-        startingPos = transform.position.x;
+        startingPos = transform.position.y;
     }
 
     // Negate time elapsed since last physics update
     void FixedUpdate() {
         debounceTimer -= Time.deltaTime;
 
-        transform.Translate(Vector3.right * Time.deltaTime * speed * direction); //Move the enemy to the right
-        if (transform.position.x > startingPos + distance || transform.position.x < startingPos) 
+        transform.Translate(Vector3.down * Time.deltaTime * speed * direction); //Move the enemy to the right
+        if (transform.position.y > startingPos + distance || transform.position.y < startingPos) 
             direction *= -1; //Change direction of sprite
     }
 
