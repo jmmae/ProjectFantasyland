@@ -15,8 +15,8 @@ public class PlatformMovement : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate() {
-        transform.Translate(Vector3.down * Time.deltaTime * speed * direction); //Move the enemy to the right
+        transform.Translate(Vector3.down * Time.deltaTime * speed * direction); //Move the platform down 
         if (transform.position.y > startingPos + distance || transform.position.y < startingPos) 
-            direction *= -1; //Change direction of sprite
+            direction *= -1; //Change the direction of the platform
     }
 }
