@@ -9,9 +9,12 @@ public class PlayerMovement : MonoBehaviour {
     public float xAxis;
     public float speed = 30f;
     public float jumpSpeed = 50f;
+    private int maxJumps = 2;
+    private int jumpsLeft;
     
     public static int coinCounter = 0;
     public static int livesCounter = 3;
+
     public float bulletSpeed = 20f;
     public int bulletDamage = 10;
     
@@ -21,13 +24,10 @@ public class PlayerMovement : MonoBehaviour {
     private Rigidbody rigidBody;
     private CapsuleCollider capsuleCollider;
     private SpriteRenderer spriteRenderer;
-    
-    [SerializeField] private LayerMask floorLayer;
-
-    //private GameObject cameraMovement;
     private GameObject playerSpawn;
     private GameObject projectileSpawner;
     private Animator animator;
+
     private bool grounded;
     private int direction = 1;
 
@@ -38,20 +38,24 @@ public class PlayerMovement : MonoBehaviour {
     public GameObject bulletPrefab;
     public static bool keyObtained;
 
+    [SerializeField] private LayerMask floorLayer;
+
     private void Start() {
         rigidBody = GetComponent<Rigidbody>();
         capsuleCollider = GetComponent<CapsuleCollider>();
-        //cameraMovement = GameObject.Find("Main Camera");
-        playerSpawn = GameObject.Find("PlayerSpawn");
         animator = GetComponent<Animator>();
+
+        playerSpawn = GameObject.Find("PlayerSpawn");
         projectileSpawner = GameObject.Find("ProjectileSpawner");
 
         rigidBody.transform.position = playerSpawn.transform.position; // Sets the player location to player spawn
+
         gameOver = false;
         keyObtained = false;
 
         coinCounter = 0; //Reset the Coin Counter
         livesCounter = 3; //Resets the Lives Counter
+        jumpsLeft = maxJumps;
     }
 
     // Update is called once per frame
@@ -88,9 +92,21 @@ public class PlayerMovement : MonoBehaviour {
         rigidBody.velocity = movement;
 
         // Allows player to jump:
-        if (grounded && Input.GetKey(KeyCode.Space))
-            rigidBody.velocity = new Vector3(rigidBody.velocity.x, jumpSpeed, 0);
+        // if (Input.GetKey(KeyCode.Space))  {
+        //     if (grounded && jumpsLeft > 0) {
+        //         rigidBody.velocity = new Vector3(rigidBody.velocity.x, jumpSpeed, 0);
+        //     } 
+        // }
 
+         if (Input.GetKey(KeyCode.Space) && (jumpsLeft > 0)) {
+            rigidBody.velocity = new Vector3(rigidBody.velocity.x, jumpSpeed, 0);
+            jumpsLeft -= 1;
+        }
+
+        if (grounded && rigidBody.velocity.y <= 0) {
+            jumpsLeft = maxJumps;
+        }
+        
         // Allows player to change direction in appearance
         if (xAxis < 0f) {
             direction = -1;
@@ -102,8 +118,6 @@ public class PlayerMovement : MonoBehaviour {
             transform.rotation = Quaternion.AngleAxis(90, Vector3.up);
         } else
             animator.SetBool("isWalking", false);
-
-        //cameraMovement.transform.position = new Vector3(rigidBody.position.x, rigidBody.position.y, cameraMovement.transform.position.z) + new Vector3(0, 20, 0); //Camera follows player
         
         Physics.gravity = new Vector3(0, -100F, 0); // Overrides gravity of player
 
@@ -142,5 +156,4 @@ public class PlayerMovement : MonoBehaviour {
         Application.Quit();
         print("Exited Game");
     }
-
 }
