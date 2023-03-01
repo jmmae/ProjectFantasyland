@@ -97,13 +97,6 @@ public class PlayerMovement : MonoBehaviour {
         xAxis = Input.GetAxis("Horizontal");
         debounceTimer -= Time.deltaTime;
 
-        // Allows player to jump:
-        // if (Input.GetKey(KeyCode.Space))  {
-        //     if (grounded && jumpsLeft > 0) {
-        //         rigidBody.velocity = new Vector3(rigidBody.velocity.x, jumpSpeed, 0);
-        //     } 
-        // }
-
         if (Input.GetKey(KeyCode.Space) && (jumpsLeft > 0) && (debounceTimer <= 0) && (!spaceBarHeld)) {
             if (jumpsLeft == 1) {
                 rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y + secondJump, 0);
@@ -117,7 +110,7 @@ public class PlayerMovement : MonoBehaviour {
             spaceBarHeld = false;
         }
 
-        if (grounded && rigidBody.velocity.y <= 0) {
+        if (grounded && rigidBody.velocity.y <= 0.05f && rigidBody.velocity.y >= -0.05f) {
             jumpsLeft = maxJumps;
         }
 
