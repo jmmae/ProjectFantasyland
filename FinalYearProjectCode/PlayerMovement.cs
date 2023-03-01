@@ -8,7 +8,12 @@ public class PlayerMovement : MonoBehaviour {
 
     public float xAxis;
     public float speed = 30f;
+    public float runSpeed = 50f;
+
     public float jumpSpeed = 50f;
+    public float secondJump = 30f;
+    private bool spaceBarHeld = false;
+
     private int maxJumps = 2;
     private int jumpsLeft;
     
@@ -37,6 +42,9 @@ public class PlayerMovement : MonoBehaviour {
 
     public GameObject bulletPrefab;
     public static bool keyObtained;
+
+    private float debounce = 0.1f; 
+    private float debounceTimer = 0f; 
 
     [SerializeField] private LayerMask floorLayer;
 
@@ -81,15 +89,13 @@ public class PlayerMovement : MonoBehaviour {
             spawnedBullet.damage = bulletDamage;
             spawnedBullet.direction = direction;
         }
+        
     }
     
     void FixedUpdate() {
         grounded = isOnTheGround();
         xAxis = Input.GetAxis("Horizontal");
-
-        // Setting up player movememnt so it can be manipulated
-        Vector3 movement = new Vector3(xAxis * speed, rigidBody.velocity.y, 0);
-        rigidBody.velocity = movement;
+        debounceTimer -= Time.deltaTime;
 
         // Allows player to jump:
         // if (Input.GetKey(KeyCode.Space))  {
@@ -98,13 +104,31 @@ public class PlayerMovement : MonoBehaviour {
         //     } 
         // }
 
-         if (Input.GetKey(KeyCode.Space) && (jumpsLeft > 0)) {
-            rigidBody.velocity = new Vector3(rigidBody.velocity.x, jumpSpeed, 0);
+        if (Input.GetKey(KeyCode.Space) && (jumpsLeft > 0) && (debounceTimer <= 0) && (!spaceBarHeld)) {
+            if (jumpsLeft == 1) {
+                rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y + secondJump, 0);
+            } else {
+                rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y + jumpSpeed, 0);
+            }
             jumpsLeft -= 1;
+            debounceTimer = debounce;
+            spaceBarHeld = true;
+        } else if (!Input.GetKey(KeyCode.Space)) {
+            spaceBarHeld = false;
         }
 
         if (grounded && rigidBody.velocity.y <= 0) {
             jumpsLeft = maxJumps;
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            // Setting up player movememnt so it can be manipulated when LeftShift is held
+            Vector3 movement = new Vector3(xAxis * runSpeed, rigidBody.velocity.y, 0);
+            rigidBody.velocity = movement;
+        } else {
+            // Setting up player movememnt so it can be manipulated
+            Vector3 movement = new Vector3(xAxis * speed, rigidBody.velocity.y, 0);
+            rigidBody.velocity = movement;
         }
         
         // Allows player to change direction in appearance
@@ -157,3 +181,4 @@ public class PlayerMovement : MonoBehaviour {
         print("Exited Game");
     }
 }
+
