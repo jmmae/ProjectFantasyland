@@ -39,3 +39,7 @@ The changes made in the Enemies.cs now allow for player hits to decrease player 
 **21-02-23**: I have created a PlatformMovement.cs file which will allow the platforms to move up and down. This will give the game a harder difficult as it was just stationary platforms before.
 
 **26-02-23**: I have implemented a double jump feature in the PlayerMovement.cs file which uses a maxJumps counter which will keep track of how many jumps the player has made. This will allow the game to be more dynamic and allow the player to jump onto higher platforms. This will later be utilised when creating more difficult levels.
+
+**01-03-23**: I have updated the double jump to make use of a debounce timer which will allow each jump to be timed for the right amount of max jumps (2). The new code makes use of if statements that check whether the player is on the ground, if they have jumps left from the jumpsLeft counter as well as if the debounce timer has ran out. 
+
+I have also made a sprint mode which will allow the player to run faster when they hold down LeftShift. This will give the game a faster pace and allow players to get through the game faster and can thus be more appealing. 
