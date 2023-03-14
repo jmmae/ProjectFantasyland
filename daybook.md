@@ -43,3 +43,5 @@ The changes made in the Enemies.cs now allow for player hits to decrease player 
 **01-03-23**: I have updated the double jump to make use of a debounce timer which will allow each jump to be timed for the right amount of max jumps (2). The new code makes use of if statements that check whether the player is on the ground, if they have jumps left from the jumpsLeft counter as well as if the debounce timer has ran out. 
 
 I have also made a sprint mode which will allow the player to run faster when they hold down LeftShift. This will give the game a faster pace and allow players to get through the game faster and can thus be more appealing. 
+
+**14-03-23**: I have created a PauseMenu which will appear after clicking a Pause button in the top right corner of the screen during the game. This pause menu will allow the player to pause the game, restart the game, and go back to the StartMenu. This PauseMenu will enhance the player experience. 
