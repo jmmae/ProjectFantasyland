@@ -39,6 +39,7 @@ public class PlayerMovement : MonoBehaviour {
     public static bool gameOver;
     public GameObject gameOverScreen;
     public GameObject winScreen;
+    public GameObject pauseScreen;
 
     public GameObject bulletPrefab;
     public static bool keyObtained;
@@ -167,6 +168,20 @@ public class PlayerMovement : MonoBehaviour {
     //Replay Current Level
     public void Replay() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single); 
+    }
+
+    public void Resume() {
+        pauseScreen.SetActive(false);
+        Time.timeScale = 1;
+    }
+
+    public void Pause() {
+        pauseScreen.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void startMenu() {
+        SceneManager.LoadScene("StartMenu");
     }
 
     public void exitGame() {
