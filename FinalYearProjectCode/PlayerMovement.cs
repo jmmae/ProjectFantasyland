@@ -65,6 +65,7 @@ public class PlayerMovement : MonoBehaviour {
         coinCounter = 0; //Reset the Coin Counter
         livesCounter = 3; //Resets the Lives Counter
         jumpsLeft = maxJumps;
+        Time.timeScale = 1;
     }
 
     // Update is called once per frame
