@@ -45,3 +45,5 @@ The changes made in the Enemies.cs now allow for player hits to decrease player 
 I have also made a sprint mode which will allow the player to run faster when they hold down LeftShift. This will give the game a faster pace and allow players to get through the game faster and can thus be more appealing. 
 
 **14-03-23**: I have created a PauseMenu which will appear after clicking a Pause button in the top right corner of the screen during the game. This pause menu will allow the player to pause the game, restart the game, and go back to the StartMenu. This PauseMenu will enhance the player experience. 
+
+**17-03-23**: This week I have been focusing on making the UI of the game more simplistic and cohesive. I am now using icons/buttons from the same icon asset pack, "simple icon pastel tone" throughout the game which, the noticeable changes are in the GameOverScreen, WinScreen and the new PauseMenu. I have also created a Level_3 which is now attached through the Level Menu in the StartMenu and after completing Level_2. 
