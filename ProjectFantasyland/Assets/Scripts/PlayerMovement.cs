@@ -8,10 +8,18 @@ public class PlayerMovement : MonoBehaviour {
 
     public float xAxis;
     public float speed = 30f;
+    public float runSpeed = 50f;
+
     public float jumpSpeed = 50f;
+    public float secondJump = 30f;
+    private bool spaceBarHeld = false;
+
+    private int maxJumps = 2;
+    private int jumpsLeft;
     
     public static int coinCounter = 0;
     public static int livesCounter = 3;
+
     public float bulletSpeed = 20f;
     public int bulletDamage = 10;
     
@@ -21,37 +29,43 @@ public class PlayerMovement : MonoBehaviour {
     private Rigidbody rigidBody;
     private CapsuleCollider capsuleCollider;
     private SpriteRenderer spriteRenderer;
-    
-    [SerializeField] private LayerMask floorLayer;
-
-    //private GameObject cameraMovement;
     private GameObject playerSpawn;
     private GameObject projectileSpawner;
     private Animator animator;
+
     private bool grounded;
     private int direction = 1;
 
     public static bool gameOver;
     public GameObject gameOverScreen;
     public GameObject winScreen;
+    public GameObject pauseScreen;
 
     public GameObject bulletPrefab;
     public static bool keyObtained;
 
+    private float debounce = 0.1f; 
+    private float debounceTimer = 0f; 
+
+    [SerializeField] private LayerMask floorLayer;
+
     private void Start() {
         rigidBody = GetComponent<Rigidbody>();
         capsuleCollider = GetComponent<CapsuleCollider>();
-        //cameraMovement = GameObject.Find("Main Camera");
-        playerSpawn = GameObject.Find("PlayerSpawn");
         animator = GetComponent<Animator>();
+
+        playerSpawn = GameObject.Find("PlayerSpawn");
         projectileSpawner = GameObject.Find("ProjectileSpawner");
 
         rigidBody.transform.position = playerSpawn.transform.position; // Sets the player location to player spawn
+
         gameOver = false;
         keyObtained = false;
 
         coinCounter = 0; //Reset the Coin Counter
         livesCounter = 3; //Resets the Lives Counter
+        jumpsLeft = maxJumps;
+        Time.timeScale = 1;
     }
 
     // Update is called once per frame
@@ -77,20 +91,41 @@ public class PlayerMovement : MonoBehaviour {
             spawnedBullet.damage = bulletDamage;
             spawnedBullet.direction = direction;
         }
+        
     }
     
     void FixedUpdate() {
         grounded = isOnTheGround();
         xAxis = Input.GetAxis("Horizontal");
+        debounceTimer -= Time.deltaTime;
 
-        // Setting up player movememnt so it can be manipulated
-        Vector3 movement = new Vector3(xAxis * speed, rigidBody.velocity.y, 0);
-        rigidBody.velocity = movement;
+        if (Input.GetKey(KeyCode.Space) && (jumpsLeft > 0) && (debounceTimer <= 0) && (!spaceBarHeld)) {
+            if (jumpsLeft == 1) {
+                rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y + secondJump, 0);
+            } else {
+                rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y + jumpSpeed, 0);
+            }
+            jumpsLeft -= 1;
+            debounceTimer = debounce;
+            spaceBarHeld = true;
+        } else if (!Input.GetKey(KeyCode.Space)) {
+            spaceBarHeld = false;
+        }
 
-        // Allows player to jump:
-        if (grounded && Input.GetKey(KeyCode.Space))
-            rigidBody.velocity = new Vector3(rigidBody.velocity.x, jumpSpeed, 0);
+        if (grounded && rigidBody.velocity.y <= 0.05f && rigidBody.velocity.y >= -0.05f) {
+            jumpsLeft = maxJumps;
+        }
 
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            // Setting up player movememnt so it can be manipulated when LeftShift is held
+            Vector3 movement = new Vector3(xAxis * runSpeed, rigidBody.velocity.y, 0);
+            rigidBody.velocity = movement;
+        } else {
+            // Setting up player movememnt so it can be manipulated
+            Vector3 movement = new Vector3(xAxis * speed, rigidBody.velocity.y, 0);
+            rigidBody.velocity = movement;
+        }
+        
         // Allows player to change direction in appearance
         if (xAxis < 0f) {
             direction = -1;
@@ -102,8 +137,6 @@ public class PlayerMovement : MonoBehaviour {
             transform.rotation = Quaternion.AngleAxis(90, Vector3.up);
         } else
             animator.SetBool("isWalking", false);
-
-        //cameraMovement.transform.position = new Vector3(rigidBody.position.x, rigidBody.position.y, cameraMovement.transform.position.z) + new Vector3(0, 20, 0); //Camera follows player
         
         Physics.gravity = new Vector3(0, -100F, 0); // Overrides gravity of player
 
@@ -138,9 +171,22 @@ public class PlayerMovement : MonoBehaviour {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single); 
     }
 
+    public void Resume() {
+        pauseScreen.SetActive(false);
+        Time.timeScale = 1;
+    }
+
+    public void Pause() {
+        pauseScreen.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void startMenu() {
+        SceneManager.LoadScene("StartMenu");
+    }
+
     public void exitGame() {
         Application.Quit();
         print("Exited Game");
     }
-
 }
