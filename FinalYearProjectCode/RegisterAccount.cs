@@ -8,12 +8,9 @@ using TMPro;
 
 public class RegisterAccount : MonoBehaviour {
     
-    public TextMeshProUGUI usernameInp;
+    public static TextMeshProUGUI usernameInp;
     public TextMeshProUGUI passwordInp;
     public Button registerButton;
-    public Button loginButton;
-    public GameObject levelMenu;
-    public GameObject loginMenu;
     ArrayList accounts;
     
     void Start() {
