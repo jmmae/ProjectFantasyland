@@ -7,7 +7,7 @@ public class Key : MonoBehaviour {
     private void OnTriggerEnter(Collider collide) {
         if (collide.transform.tag == "Player") {
             PlayerMovement.keyObtained = true;
-            PlayerStopwatch.stopwatch = false;
+            PlayerStopwatch.stopwatch = 2;
             Destroy(gameObject);
         }
     }
