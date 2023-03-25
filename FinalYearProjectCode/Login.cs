@@ -10,6 +10,7 @@ public class Login : MonoBehaviour {
 
     public TextMeshProUGUI usernameInp;
     public TextMeshProUGUI passwordInp;
+    public TextMeshProUGUI displayUsername;
     public static string usernameLogged;
     public Button loginButton;
     public GameObject levelMenu;
@@ -49,6 +50,7 @@ public class Login : MonoBehaviour {
             levelMenu.SetActive(true);
             loginMenu.SetActive(false);
             usernameLogged = usernameInp.text;
+            displayUsername.text = "Welcome " + usernameInp.text + "!";
         } else {
             Debug.Log("Incorrect account details");
         }
