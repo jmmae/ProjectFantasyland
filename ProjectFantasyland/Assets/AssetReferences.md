@@ -14,3 +14,18 @@ Pixel adventure 1: 2D characters (no date) Unity Asset Store. Available at: http
 Pixel skies demo background pack: 2d environments (no date) Unity Asset Store. Available at: https://assetstore.unity.com/packages/2d/environments/pixel-skies-demo-background-pack-226622 
 
 Simple icon pastel tone: 2d icons (no date) Unity Asset Store. Available at: https://assetstore.unity.com/packages/2d/gui/icons/simple-icon-pastel-tone-107568 
+
+Audio:
+
+emotional-piano-background-music.mp3 - https://freesound.org/people/Migfus20/sounds/560448/
+
+power-up.wav - https://freesound.org/people/Duskbreaker/sounds/649724/
+
+coins.wav - https://freesound.org/people/ProjectsU012/sounds/341695/
+
+shadydave-snowfall-final.mp3 - https://freesound.org/people/ShadyDave/sounds/262259/
+
+kenneth_cooney_success.wav - https://freesound.org/people/Kenneth_Cooney/sounds/457547/
+
+screamstudio_arcade-game-over.wav - https://freesound.org/people/ScreamStudio/sounds/412168/
+

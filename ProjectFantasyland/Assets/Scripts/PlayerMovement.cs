@@ -39,7 +39,6 @@ public class PlayerMovement : MonoBehaviour {
     public static bool gameOver;
     public GameObject gameOverScreen;
     public GameObject winScreen;
-    public GameObject pauseScreen;
 
     public GameObject bulletPrefab;
     public static bool keyObtained;
@@ -140,10 +139,10 @@ public class PlayerMovement : MonoBehaviour {
         
         Physics.gravity = new Vector3(0, -100F, 0); // Overrides gravity of player
 
-        if (numOfLives() <= 0) {
+        if ((numOfLives() <= 0) || rigidBody.transform.position.y < -145) {
             rigidBody.velocity = Vector3.zero; //Stop player from moving
             gameOver = true; 
-        }
+        } 
     }
 
     // Checks if the player is on the ground using Raycast
@@ -166,27 +165,4 @@ public class PlayerMovement : MonoBehaviour {
         return livesCounter; 
     }
 
-    //Replay Current Level
-    public void Replay() {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single); 
-    }
-
-    public void Resume() {
-        pauseScreen.SetActive(false);
-        Time.timeScale = 1;
-    }
-
-    public void Pause() {
-        pauseScreen.SetActive(true);
-        Time.timeScale = 0;
-    }
-
-    public void startMenu() {
-        SceneManager.LoadScene("StartMenu");
-    }
-
-    public void exitGame() {
-        Application.Quit();
-        print("Exited Game");
-    }
 }
